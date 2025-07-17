@@ -1,0 +1,19 @@
+[profile.default]
+src = "src"
+out = "out"
+libs = ["lib"]
+solc_version = "0.8.30"
+
+# 开发环境配置
+[profile.dev]
+solc_version = "0.8.20"
+optimizer_runs = 0  # 关闭优化器加快编译速度
+
+# 生产环境配置
+[profile.prod]
+solc_version = "0.8.23"
+optimizer_runs = 10_000  # 更高优化级别
+
+
+
+# See more config options https://github.com/foundry-rs/foundry/blob/master/crates/config/README.md#all-options
