@@ -1,15 +1,4 @@
 ## Foundry
-
-cast balance 67dae86a14e0812f015220cbec023b3a7f672f4563f98297144595f673bb6270 \
-  --rpc-url https://eth-sepolia.g.alchemy.com/v2/sUw2f_qi4BEhxg0RwpyX-
-
-
-forge script script/MyToken.s.sol --private-key 67dae86a14e0812f015220cbec023b3a7f672f4563f98297144595f673bb6270 --rpc-url https://eth-sepolia.g.alchemy.com/v2/sUw2f_qi4BEhxg0RwpyX- --broadcast
-
-alchmy --private-key sUw2f_qi4BEhxg0RwpyX-
-
-
-
 **Foundry is a blazing fast, portable and modular toolkit for Ethereum application development written in Rust.**
 
 Foundry consists of:
