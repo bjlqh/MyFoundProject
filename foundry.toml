@@ -3,10 +3,13 @@ src = "src"
 out = "out"
 libs = ["lib"]
 solc_version = "0.8.30"
+[rpc_endpoints]
+sepolia = "https://eth-sepolia.g.alchemy.com/v2/sUw2f_qi4BEhxg0RwpyX-"
+
 
 # 开发环境配置
 [profile.dev]
-solc_version = "0.8.20"
+solc_version = "0.8.23"
 optimizer_runs = 0  # 关闭优化器加快编译速度
 
 # 生产环境配置
