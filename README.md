@@ -1,5 +1,20 @@
+# MyFoundProject
 
 
+
+## 部署
+forge script script/TokenBank.s.sol --broadcast --rpc-url http://127.0.0.1:8545 --private-key 0xac0974bec39a17e36ba4a6b4d238ff944bacb478cbed5efcae784d7bf4f2ff80
+
+## 检查
+cast code 0xCf7Ed3AccA5a467e9e704C703E8D87F634fB0Fc9 --rpc-url http://127.0.0.1:8545
+
+cast code 0xDc64a140Aa3E981100a9becA4E685f962f0cF6C9 --rpc-url http://127.0.0.1:8545
+
+
+## 测试
+forge test --mp test/NFTMarketInvarientTest.t.sol
+forge test --match-path test/NFTMarketInvarientTest.t.sol >> test.log 2>&1
+forge test --match-path test/NFTMarketTest.t.sol >> test.log 2>&1
 
 ## Foundry
 **Foundry is a blazing fast, portable and modular toolkit for Ethereum application development written in Rust.**
