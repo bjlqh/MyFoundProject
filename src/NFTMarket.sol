@@ -6,11 +6,10 @@ import "./MyERC721.sol";
 import "@openzeppelin/contracts/token/ERC721/IERC721Receiver.sol";
 
 contract NFTMarket is IERC721Receiver {
-    
     MyERC721 public nft;
     MyToken public token;
 
-    constructor(address _token, address _nft){
+    constructor(address _token, address _nft) {
         token = MyToken(_token);
         nft = MyERC721(_nft);
     }
@@ -21,10 +20,23 @@ contract NFTMarket is IERC721Receiver {
     }
     mapping(uint => Listing) public listings;
 
+    uint256[] public listedTokenIds;
+
     //上架事件
-    event Listed(address indexed nft, uint256 indexed tokenId, address indexed seller, uint256 price);
+    event Listed(
+        address indexed nft,
+        uint256 indexed tokenId,
+        address indexed seller,
+        uint256 price
+    );
     //购买事件
-    event Bought(address indexed nft, uint256 indexed tokenId, address indexed buyer, address seller, uint256 price);
+    event Bought(
+        address indexed nft,
+        uint256 indexed tokenId,
+        address indexed buyer,
+        address seller,
+        uint256 price
+    );
 
     error NotOwner();
     error InvalidPrice();
@@ -32,10 +44,11 @@ contract NFTMarket is IERC721Receiver {
     //上架
     function list(uint tokenId, uint price) external {
         //token不属于owner
-        if(nft.ownerOf(tokenId) != msg.sender) revert NotOwner();
-        if(price <= 0) revert InvalidPrice();
+        if (nft.ownerOf(tokenId) != msg.sender) revert NotOwner();
+        if (price <= 0) revert InvalidPrice();
         nft.safeTransferFrom(msg.sender, address(this), tokenId);
-        listings[tokenId] = Listing({seller: msg.sender, price: price}); 
+        listings[tokenId] = Listing({seller: msg.sender, price: price});
+        listedTokenIds.push(tokenId);
         emit Listed(address(nft), tokenId, msg.sender, price);
     }
 
@@ -47,23 +60,41 @@ contract NFTMarket is IERC721Receiver {
     //购买
     function buyNFT(uint tokenId, uint price) external {
         Listing memory item = listings[tokenId];
-        if(item.seller == address(0)) revert NotListed();
-        if(msg.sender == item.seller) revert CannotBuyOwn();
-        if(price != item.price) revert InvalidPayment();
-        if(token.balanceOf(msg.sender) < item.price) revert InSufficientFunds();
+        if (item.seller == address(0)) revert NotListed();
+        if (msg.sender == item.seller) revert CannotBuyOwn();
+        if (price != item.price) revert InvalidPayment();
+        if (token.balanceOf(msg.sender) < item.price)
+            revert InSufficientFunds();
 
         //支付token到market
-        bool success = token.transferFrom(msg.sender, address(this), item.price);
+        bool success = token.transferFrom(
+            msg.sender,
+            address(this),
+            item.price
+        );
         require(success, "Token transferFrom failed");
 
         //转移所有权给买家
         nft.safeTransferFrom(address(this), msg.sender, tokenId);
-        
+
         //清除
         delete listings[tokenId];
 
+        // 移除 listedTokenIds 中的 tokenId
+        for (uint i = 0; i < listedTokenIds.length; i++) {
+            if (listedTokenIds[i] == tokenId) {
+                listedTokenIds[i] = listedTokenIds[listedTokenIds.length - 1];
+                listedTokenIds.pop();
+                break;
+            }
+        }
+
         //购买
         emit Bought(address(nft), tokenId, msg.sender, item.seller, item.price);
+    }
+
+    function getListedTokenIdsLength() public view returns (uint256) {
+        return listedTokenIds.length;
     }
 
     /**

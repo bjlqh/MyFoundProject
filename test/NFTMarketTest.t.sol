@@ -5,7 +5,7 @@ import "forge-std/console.sol";
 import "forge-std/Test.sol";
 import "../src/MyToken.sol";
 import "../src/MyERC721.sol";
-import "../../src/NFTMarket.sol";
+import "../src/NFTMarket.sol";
 
 contract NFTMarketTest is Test {
     MyToken token;

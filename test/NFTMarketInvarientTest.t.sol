@@ -7,7 +7,7 @@ import "forge-std/StdInvariant.sol";
 
 import "../src/MyToken.sol";
 import "../src/MyERC721.sol";
-import "../../src/NFTMarket.sol";
+import "../src/NFTMarket.sol";
 
 contract MarketHandler is Test {
     NFTMarket market;
