@@ -69,16 +69,31 @@ contract SimpleMultiSigWallet {
         emit ProposalConfirmed(_proposalId, msg.sender);
     }
 
+    event LogData(bytes indexed data);
+
     function executeProposal(uint proposalId) external {
         Proposal storage proposal = proposals[proposalId];
         require(!proposal.executed, "Proposal already executed");
         require(proposal.confirmCount >= required, "Not enough confirmations");
 
-        (bool success,) = proposal.to.call{value: proposal.value}(proposal.data);
-        require(success, "Tx failed");
+        emit LogData(proposal.data);
+
+        bool success;
+        bytes memory returnData;
+        if(proposal.data.length == 0){
+            //当前合约给to转账
+            (success, ) = proposal.to.call {value: proposal.value}("");
+        }else {
+            (success, returnData) = proposal.to.call {value: proposal.value}(proposal.data);
+        }
+
+        require(success, string(returnData));
         proposal.executed = true;
         emit ProposalExecuted(proposalId, msg.sender);
     }
 
     receive() external payable {}
+
+    function deposit() external payable {}
+    
 }
