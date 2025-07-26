@@ -21,7 +21,7 @@ contract NFTMarketScript is Script {
         console.log("nft address:",address(nft));
 
         //部署NFTMarket
-        NFTMarket market = new NFTMarket(address(token),address(nft));
+        NFTMarket market = new NFTMarket(address(token),address(nft), address(0x123));
         console.log("market address:",address(market));
 
         vm.stopBroadcast();

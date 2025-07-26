@@ -3,6 +3,7 @@
 .github/
 lib/
 tmp
+logs
 
 # Compiler files
 cache/

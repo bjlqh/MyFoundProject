@@ -27,6 +27,7 @@ contract EIP721 is Test {
     uint256 public user1PrivateKey;
     uint256 public user2PrivateKey;
     uint256 public whitelistSignerPrivateKey;
+    uint256 public decimals;
 
     function setUp() public {
         //生成私钥
@@ -44,6 +45,7 @@ contract EIP721 is Test {
         //部署合约
         vm.startPrank(owner);
         token = new MyToken("MyEIP721Token", "MET");
+        decimals = token.decimals();
         nft = new MyERC721("MyEIP721NFT", "MENFT");
         tokenBank = new TokenBank(address(token));
         nftMarket = new NFTMarket(
@@ -55,8 +57,8 @@ contract EIP721 is Test {
 
         //给用户分配一些token
         vm.startPrank(owner);
-        token.transfer(user1, 100 * 1e18);
-        token.transfer(user2, 100 * 1e18);
+        token.transfer(user1, 100 * decimals);
+        token.transfer(user2, 100 * decimals);
 
 
         //铸造NFT
@@ -67,7 +69,7 @@ contract EIP721 is Test {
 
     //测试Permit存款
     function testPermitDeposit() public {
-        uint256 amount = 10 * 1e18;
+        uint256 amount = 10 * decimals;
         uint256 deadline = block.timestamp + 1 hours;
         uint256 nonce = token.nonces(user1);
 
@@ -105,8 +107,8 @@ contract EIP721 is Test {
     
     //测试Permit购买NFT
     function testPermitBuyNFT() public {
-        uint256 tokenId = 1; // NFT ID从1开始，因为使用了Counters
-        uint256 price = 5 * 1e18;
+        uint256 tokenId = 1;
+        uint256 price = 5 * decimals;
         uint256 deadline = block.timestamp + 1 hours;
 
         vm.prank(owner);
@@ -114,6 +116,7 @@ contract EIP721 is Test {
     
         vm.prank(owner);
         nftMarket.list(tokenId, price);
+        console.log(unicode"上架中,tokenId=%s, price=%s, owner=%s", tokenId, price / decimals, owner);
 
         ////创建白名单签名
         //构造签名的消息内容，并进行哈希。 EIP-712 签名结构
@@ -131,17 +134,18 @@ contract EIP721 is Test {
         //拼接签名（最终的签名）
         bytes memory signature = abi.encodePacked(r, s, v);
 
-        //记录初始状态
-        //address initOwner = nft.ownerOf(tokenId);
         uint256 initUserBalance = token.balanceOf(user1);
-        
-        // 用户需要先授权Token给NFTMarket
+        console.log(unicode"还未购买token时, user1[%s]的token余额=%s", user1, token.balanceOf(user1) / decimals);
+
         vm.prank(user1);
         token.approve(address(nftMarket), price);
         
         //购买
         vm.prank(user1);
         nftMarket.permitBuy(tokenId, price, deadline, signature);
+        console.log(unicode"user1[%s]购买tokenId=%s的nft后, user1的token余额=%s", user1, tokenId, token.balanceOf(user1) / decimals);
+        console.log(unicode"tokenId=%s的nft的owner=%s", tokenId, nft.ownerOf(tokenId));
+
 
         //验证
         assertEq(nft.ownerOf(tokenId), user1, "NFT should be transferred to user1");
@@ -153,7 +157,7 @@ contract EIP721 is Test {
     //购买失败，不在白名单
     function test_RevertWhen_NotInWhitelist() public {
         uint256 tokenId = 1;
-        uint256 price = 5 * 1e18;
+        uint256 price = 5 * decimals;
 
         vm.prank(owner);
         nft.approve(address(nftMarket), tokenId);
@@ -181,7 +185,7 @@ contract EIP721 is Test {
     //购买失败，签名过期
     function test_RevertWhen_SignatureExpired() public {
         uint256 tokenId = 1;
-        uint256 price = 5 * 1e18;
+        uint256 price = 5 * decimals;
 
         //一小时之前过期
         uint256 deadline = block.timestamp - 1;
@@ -208,7 +212,7 @@ contract EIP721 is Test {
     //购买失败，重复签名
     function test_RevertWhen_SignatureReused() public {
         uint256 tokenId = 1;
-        uint256 price = 5 * 1e18;
+        uint256 price = 5 * decimals;
         uint256 deadline = block.timestamp + 1 hours;
 
         // 初始上架

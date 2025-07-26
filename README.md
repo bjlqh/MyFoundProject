@@ -1,5 +1,9 @@
 # MyFoundProject
 
+测试输出
+forge test --match-contract EIP721 -vv > logs/EIP721Test.log 2>&1
+
+
 cast send 0xa513E6E4b8f2a923D98304ec87F64353C4D5C853 "transfer(address,uint256)" 0x70997970C51812dc3A010C7d01b50e0d17dc79C8 60000000000000000000 --private-key 0xac0974bec39a17e36ba4a6b4d238ff944bacb478cbed5efcae784d7bf4f2ff80 --rpc-url http://127.0.0.1:8545
 
 

@@ -48,7 +48,7 @@ contract NFTMarketInvariantTest is StdInvariant, Test {
     function setUp() public {
         token = new MyToken("MockToken", "MTK");
         nft = new MyERC721("MockNFT", "MNFT");
-        market = new NFTMarket(address(token), address(nft));
+        market = new NFTMarket(address(token), address(nft), address(0x12345678));
 
         //铸造
         nft.mint(u1, "1");
