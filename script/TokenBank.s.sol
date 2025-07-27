@@ -1,5 +1,5 @@
 // SPDX-License-Identifier: MIT
-pragma solidity ^0.8.25;
+pragma solidity ^0.8.17;
 
 import {Script, console} from "forge-std/Script.sol";
 import "../src/bank/TokenBank.sol";
@@ -16,7 +16,7 @@ contract TokenBankScript is Script {
         console.log("token address:",address(token));
         
         //部署TokenBank
-        TokenBank bank = new TokenBank(address(token));
+        TokenBank bank = new TokenBank(address(token),address(0x0));
         console.log("bank address:",address(bank));
 
         vm.stopBroadcast();
