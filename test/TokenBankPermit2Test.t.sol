@@ -4,12 +4,11 @@ pragma solidity ^0.8.17;
 import "forge-std/Test.sol";
 import "../src/MyToken.sol";
 import "../src/bank/TokenBank.sol";
-import "../src/bank/SimplePermit2.sol";
 
 contract TokenBankPermit2Test is Test {
     MyToken public token;
     TokenBank public tokenBank;
-    SimplePermit2 public permit2;
+    Permit2 public permit2;
     
     address public user = address(0x123);
     address public deployer;
@@ -19,7 +18,7 @@ contract TokenBankPermit2Test is Test {
         
         // 部署合约
         token = new MyToken("MyEIP712Token", "MET");
-        permit2 = new SimplePermit2();
+        permit2 = new Permit2();
         tokenBank = new TokenBank(address(token), address(permit2));
         
         // 给用户一些代币（从部署者转移）

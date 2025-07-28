@@ -6,7 +6,6 @@ import "../src/MyToken.sol";
 import "../src/MyERC721.sol";
 import "../src/NFTMarket.sol";
 import "../src/bank/TokenBank.sol";
-import "../src/bank/SimplePermit2.sol";
 
 contract DeployEIP712Script is Script {
     
@@ -25,7 +24,7 @@ contract DeployEIP712Script is Script {
         console.log("NFT deployed at:", address(nft));
 
         // 部署 Permit2 合约
-        SimplePermit2 permit2 = new SimplePermit2();
+        Permit2 permit2 = new Permit2();
         console.log("Permit2 deployed at:", address(permit2));
 
         // 部署TokenBank合约 (包含 Permit2 地址)
