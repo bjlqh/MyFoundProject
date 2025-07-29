@@ -1,5 +1,5 @@
 // SPDX-License-Identifier: MIT
-pragma solidity ^0.8.25;
+pragma solidity ^0.8.17;
 
 import "forge-std/console.sol";
 import "forge-std/Test.sol";
@@ -47,7 +47,7 @@ contract EIP721 is Test {
         token = new MyToken("MyEIP721Token", "MET");
         decimals = token.decimals();
         nft = new MyERC721("MyEIP721NFT", "MENFT");
-        tokenBank = new TokenBank(address(token));
+        tokenBank = new TokenBank(address(token), address(0x1));
         nftMarket = new NFTMarket(
             address(token),
             address(nft),
