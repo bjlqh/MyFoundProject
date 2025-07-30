@@ -31,6 +31,9 @@ contract NFTMarket is IERC721Receiver {
     mapping(uint => Listing) public listings;
 
     uint256[] public listedTokenIds;
+    //tokenId到index的映射
+    mapping(uint256 => uint256) public tokenIdToIndex;
+    mapping(uint256 => bool) public isListed;
 
     //上架事件
     event Listed(
@@ -71,6 +74,8 @@ contract NFTMarket is IERC721Receiver {
         nft.safeTransferFrom(msg.sender, address(this), tokenId);
         listings[tokenId] = Listing({seller: msg.sender, price: price});
         listedTokenIds.push(tokenId);
+        tokenIdToIndex[tokenId] = listedTokenIds.length - 1;
+        isListed[tokenId] = true;
         emit Listed(address(nft), tokenId, msg.sender, price);
     }
 
@@ -103,16 +108,27 @@ contract NFTMarket is IERC721Receiver {
         delete listings[tokenId];
 
         // 移除 listedTokenIds 中的 tokenId
-        for (uint i = 0; i < listedTokenIds.length; i++) {
-            if (listedTokenIds[i] == tokenId) {
-                listedTokenIds[i] = listedTokenIds[listedTokenIds.length - 1];
-                listedTokenIds.pop();
-                break;
-            }
-        }
+        removeFromListedTokenIds(tokenId);
 
         //购买
         emit Bought(address(nft), tokenId, msg.sender, item.seller, item.price);
+    }
+
+    function removeFromListedTokenIds(uint256 tokenId) internal {
+        if(!isListed[tokenId]){
+            return;
+        }
+        uint256 index = tokenIdToIndex[tokenId];
+        uint256 lastIndex = listedTokenIds.length - 1;
+        if(index != lastIndex){
+            //lastIndex元素换到index位置
+            uint256 lastTokenId = listedTokenIds[lastIndex];
+            listedTokenIds[index] = lastTokenId;
+            tokenIdToIndex[lastIndex] = index;
+        }
+        listedTokenIds.pop();
+        delete tokenIdToIndex[tokenId];
+        delete isListed[tokenId];
     }
 
     // 白名单购买函数
@@ -163,13 +179,7 @@ contract NFTMarket is IERC721Receiver {
         delete listings[tokenId];
 
         // 移除 listedTokenIds 中的 tokenId
-        for (uint i = 0; i < listedTokenIds.length; i++) {
-            if (listedTokenIds[i] == tokenId) {
-                listedTokenIds[i] = listedTokenIds[listedTokenIds.length - 1];
-                listedTokenIds.pop();
-                break;
-            }
-        }
+        removeFromListedTokenIds(tokenId);
 
         //白名单购买
         emit WhitelistBought(address(nft), tokenId, msg.sender, item.seller, item.price);

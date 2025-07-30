@@ -1,4 +1,8 @@
 # MyFoundProject
+查看gas消耗
+forge snapshot --match-path test/NFTMarketTest.t.sol
+forge snapshot --match-path test/NFTMarketTest.t.sol --gas-report
+forge test --match-contract NFTMarketTest --gas-report > ../file/gas_report_v1.md 2>&1
 
 
 Permit2 deployed at: 0x0B306BF915C4d645ff596e518fAf3F9669b97016

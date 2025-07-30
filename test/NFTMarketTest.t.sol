@@ -130,7 +130,7 @@ contract NFTMarketTest is Test {
     function testListEvent() public {
         vm.prank(u1);
         vm.expectEmit(true, true, true, true);
-        //emit Listed(address(nft), 1, u1, 10 ether);
+        emit Listed(address(nft), 1, u1, 10 ether);
         market.list(1, 10 ether);
     }
 
@@ -140,7 +140,7 @@ contract NFTMarketTest is Test {
 
         vm.prank(u2);
         vm.expectEmit(true, true, true, true);
-        //emit NFTMarket.Bought(address(nft), 1, u2, u1, 10 ether);
+        emit Bought(address(nft), 1, u2, u1, 10 ether);
         market.buyNFT(1, 10 ether);
     }
 
@@ -155,4 +155,21 @@ contract NFTMarketTest is Test {
 
         assertEq(nft.ownerOf(1), u2);
     }
+
+
+    //购买事件
+    event Bought(
+        address indexed nft,
+        uint256 indexed tokenId,
+        address indexed buyer,
+        address seller,
+        uint256 price
+    );
+
+    event Listed(
+        address indexed nft,
+        uint256 indexed tokenId,
+        address indexed seller,
+        uint256 price
+    );
 }
