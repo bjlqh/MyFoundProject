@@ -30,13 +30,13 @@ contract TokenBankPermit2Test is Test {
     
     function testDepositWithPermit2() public {
         uint256 amount = 100 * 10**18;
-        uint256 deadline = block.timestamp + 1 hours;
+        //uint256 deadline = block.timestamp + 1 hours;
         
         // 用户需要先授权 Permit2 合约
         token.approve(address(permit2), amount);
         
         // 获取当前 nonce
-        uint48 nonce = tokenBank.getPermit2Nonce(user);
+        //uint48 nonce = tokenBank.getPermit2Nonce(user);
         
         // 简化测试：直接调用 transferFrom
         permit2.transferFrom(user, address(tokenBank), uint160(amount), address(token));
@@ -67,13 +67,13 @@ contract TokenBankPermit2Test is Test {
     
     function testDepositWithPermit2Batch() public {
         uint256 amount = 100 * 10**18;
-        uint256 deadline = block.timestamp + 1 hours;
+        //uint256 deadline = block.timestamp + 1 hours;
         
         // 用户需要先授权 Permit2 合约
         token.approve(address(permit2), amount);
         
         // 获取当前 nonce
-        uint48 nonce = tokenBank.getPermit2Nonce(user);
+        //uint48 nonce = tokenBank.getPermit2Nonce(user);
         
         // 简化测试：直接调用 transferFrom
         permit2.transferFrom(user, address(tokenBank), uint160(amount), address(token));
