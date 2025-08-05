@@ -2,6 +2,7 @@
 .vscode/
 .github/
 lib/
+lib
 tmp
 logs
 

@@ -1,0 +1,183 @@
+<svg width="900" height="700" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <style>
+      .title { font-family: Arial, sans-serif; font-size: 18px; font-weight: bold; fill: #333; }
+      .subtitle { font-family: Arial, sans-serif; font-size: 14px; font-weight: bold; fill: #555; }
+      .text { font-family: Arial, sans-serif; font-size: 12px; fill: #666; }
+      .small-text { font-family: Arial, sans-serif; font-size: 10px; fill: #666; }
+      .slot { font-family: monospace; font-size: 11px; fill: #333; }
+      .used { fill: #4CAF50; stroke: #45a049; stroke-width: 1; }
+      .gap { fill: #FFC107; stroke: #FF8F00; stroke-width: 1; }
+      .new { fill: #2196F3; stroke: #1976D2; stroke-width: 1; }
+      .mapping { fill: #FF9800; stroke: #F57C00; stroke-width: 1; }
+      .struct { fill: #9C27B0; stroke: #7B1FA2; stroke-width: 1; }
+      .arrow { stroke: #666; stroke-width: 2; fill: none; marker-end: url(#arrowhead); }
+      .dashed { stroke-dasharray: 5,5; }
+    </style>
+    <marker id="arrowhead" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto">
+      <polygon points="0 0, 10 3.5, 0 7" fill="#666" />
+    </marker>
+  </defs>
+  
+  <!-- Title -->
+  <text x="450" y="30" text-anchor="middle" class="title">可升级合约存储布局详解 (含mapping和结构体)</text>
+  
+  <!-- Student1 Section -->
+  <text x="50" y="70" class="subtitle">Student1 存储布局</text>
+  
+  <!-- Student1 Storage Layout -->
+  <g transform="translate(50, 80)">
+    <!-- Slot 0: users mapping -->
+    <rect x="0" y="0" width="120" height="30" class="mapping"/>
+    <text x="60" y="20" text-anchor="middle" class="slot">Slot 0: users</text>
+    <text x="130" y="20" class="small-text">(mapping根槽位)</text>
+    
+    <!-- Slot 1: total -->
+    <rect x="0" y="35" width="120" height="30" class="used"/>
+    <text x="60" y="55" text-anchor="middle" class="slot">Slot 1: total</text>
+    
+    <!-- Gap slots -->
+    <rect x="0" y="70" width="120" height="180" class="gap"/>
+    <text x="60" y="160" text-anchor="middle" class="slot">__gap[48]</text>
+    
+    <!-- Slot numbers -->
+    <text x="-15" y="20" class="text">0</text>
+    <text x="-15" y="55" class="text">1</text>
+    <text x="-15" y="85" class="text">2</text>
+    <text x="-15" y="235" class="text">49</text>
+  </g>
+  
+  <!-- Mapping Storage Detail -->
+  <g transform="translate(300, 80)">
+    <text x="0" y="0" class="subtitle">Mapping 实际存储位置</text>
+    
+    <!-- users[1] storage -->
+    <rect x="0" y="20" width="150" height="40" class="struct"/>
+    <text x="75" y="35" text-anchor="middle" class="text">users[1].name</text>
+    <text x="75" y="50" text-anchor="middle" class="small-text">keccak256(1 . 0)</text>
+    
+    <!-- users[2] storage -->
+    <rect x="0" y="70" width="150" height="40" class="struct"/>
+    <text x="75" y="85" text-anchor="middle" class="text">users[2].name</text>
+    <text x="75" y="100" text-anchor="middle" class="small-text">keccak256(2 . 0)</text>
+    
+    <!-- Arrow from mapping slot -->
+    <path d="M 170 15 Q 200 15 200 40 Q 200 65 170 65" class="arrow dashed"/>
+    <text x="210" y="45" class="small-text">动态计算</text>
+    
+    <!-- Formula explanation -->
+    <text x="0" y="140" class="text">存储位置 = keccak256(key . slot)</text>
+    <text x="0" y="155" class="small-text">key: mapping的键值</text>
+    <text x="0" y="170" class="small-text">slot: mapping声明的槽位(0)</text>
+  </g>
+  
+  <!-- Student2 Section -->
+  <text x="50" y="320" class="subtitle">Student2 存储布局 (升级后)</text>
+  
+  <!-- Student2 Storage Layout -->
+  <g transform="translate(50, 330)">
+    <!-- Slot 0: users mapping -->
+    <rect x="0" y="0" width="120" height="30" class="mapping"/>
+    <text x="60" y="20" text-anchor="middle" class="slot">Slot 0: users</text>
+    <text x="130" y="20" class="small-text">(mapping根槽位)</text>
+    
+    <!-- Slot 1: total -->
+    <rect x="0" y="35" width="120" height="30" class="used"/>
+    <text x="60" y="55" text-anchor="middle" class="slot">Slot 1: total</text>
+    
+    <!-- Gap slots -->
+    <rect x="0" y="70" width="120" height="150" class="gap"/>
+    <text x="60" y="145" text-anchor="middle" class="slot">__gap[46]</text>
+    
+    <!-- Slot numbers -->
+    <text x="-15" y="20" class="text">0</text>
+    <text x="-15" y="55" class="text">1</text>
+    <text x="-15" y="85" class="text">2</text>
+    <text x="-15" y="205" class="text">47</text>
+  </g>
+  
+  <!-- Student2 Mapping Storage Detail -->
+  <g transform="translate(300, 330)">
+    <text x="0" y="0" class="subtitle">升级后的 Mapping 存储</text>
+    
+    <!-- users[1] storage with age -->
+    <rect x="0" y="20" width="150" height="25" class="struct"/>
+    <text x="75" y="35" text-anchor="middle" class="small-text">users[1].name (保持)</text>
+    <rect x="0" y="45" width="150" height="25" class="new"/>
+    <text x="75" y="60" text-anchor="middle" class="small-text">users[1].age (新增)</text>
+    <text x="160" y="45" class="small-text">keccak256(1 . 0)</text>
+    
+    <!-- users[2] storage with age -->
+    <rect x="0" y="80" width="150" height="25" class="struct"/>
+    <text x="75" y="95" text-anchor="middle" class="small-text">users[2].name (保持)</text>
+    <rect x="0" y="105" width="150" height="25" class="new"/>
+    <text x="75" y="120" text-anchor="middle" class="small-text">users[2].age (新增)</text>
+    <text x="160" y="105" class="small-text">keccak256(2 . 0)</text>
+    
+    <!-- Note about struct packing -->
+    <text x="0" y="150" class="text">注意: 结构体字段连续存储</text>
+    <text x="0" y="165" class="small-text">name和age在同一个起始槽位</text>
+  </g>
+  
+  <!-- Key Insights -->
+  <g transform="translate(550, 80)">
+    <text x="0" y="0" class="subtitle">关键理解</text>
+    
+    <text x="0" y="25" class="text">1. Mapping 不占用连续槽位</text>
+    <text x="0" y="45" class="text">2. 每个键值对应独立的存储位置</text>
+    <text x="0" y="65" class="text">3. 位置通过 keccak256 哈希计算</text>
+    <text x="0" y="85" class="text">4. 结构体字段连续存储</text>
+    <text x="0" y="105" class="text">5. __gap 只影响合约声明的槽位</text>
+    
+    <text x="0" y="140" class="subtitle">存储计算示例</text>
+    <text x="0" y="165" class="small-text">users[1] 位置:</text>
+    <text x="0" y="180" class="small-text">keccak256(abi.encode(1, 0))</text>
+    <text x="0" y="195" class="small-text">= 0xada5013122d395ba3c54772283fb069b10426056ef8ca54750cb9bb552a59e7d</text>
+    
+    <text x="0" y="220" class="small-text">users[2] 位置:</text>
+    <text x="0" y="235" class="small-text">keccak256(abi.encode(2, 0))</text>
+    <text x="0" y="250" class="small-text">= 0x405787fa12a823e0f2b7631cc41b3ba8828b3321ca811111fa75cd3aa3bb5ace</text>
+  </g>
+  
+  <!-- Legend -->
+  <g transform="translate(550, 330)">
+    <text x="0" y="0" class="subtitle">图例说明</text>
+    
+    <rect x="0" y="15" width="20" height="15" class="used"/>
+    <text x="30" y="27" class="text">普通状态变量</text>
+    
+    <rect x="0" y="40" width="20" height="15" class="mapping"/>
+    <text x="30" y="52" class="text">Mapping 根槽位</text>
+    
+    <rect x="0" y="65" width="20" height="15" class="struct"/>
+    <text x="30" y="77" class="text">结构体原有字段</text>
+    
+    <rect x="0" y="90" width="20" height="15" class="new"/>
+    <text x="30" y="102" class="text">升级新增字段</text>
+    
+    <rect x="0" y="115" width="20" height="15" class="gap"/>
+    <text x="30" y="127" class="text">__gap 预留槽位</text>
+  </g>
+  
+  <!-- Important Notes -->
+  <g transform="translate(50, 550)">
+    <text x="0" y="0" class="subtitle">重要说明</text>
+    
+    <text x="0" y="25" class="text">• Mapping 的存储位置与合约槽位布局无关</text>
+    <text x="0" y="45" class="text">• 结构体在 mapping 中的存储是连续的</text>
+    <text x="0" y="65" class="text">• __gap 只影响合约直接声明的状态变量槽位</text>
+    <text x="0" y="85" class="text">• 升级时新增结构体字段不会影响 mapping 的根槽位</text>
+    <text x="0" y="105" class="text">• 每个 mapping 条目的存储位置是独立计算的</text>
+  </g>
+  
+  <!-- Storage Layout Comparison -->
+  <g transform="translate(450, 550)">
+    <text x="0" y="0" class="subtitle">槽位对比</text>
+    
+    <text x="0" y="25" class="text">Student1: 合约槽位 0-49 (50个)</text>
+    <text x="0" y="45" class="text">Student2: 合约槽位 0-47 (48个)</text>
+    <text x="0" y="65" class="text">Mapping数据: 独立的哈希位置</text>
+    <text x="0" y="85" class="text">不占用合约的连续槽位空间</text>
+  </g>
+  
+</svg>
