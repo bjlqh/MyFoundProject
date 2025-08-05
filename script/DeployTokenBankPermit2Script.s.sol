@@ -12,8 +12,8 @@ contract DeployTokenBankPermit2Script is Script {
     function run() public {
         vm.startBroadcast();
 
-        uint256 deployerPrivateKey = vm.envUint("PRIVATE_KEY");
-        address deployer = vm.addr(deployerPrivateKey);
+        //uint256 deployerPrivateKey = vm.envUint("PRIVATE_KEY");
+        //address deployer = vm.addr(deployerPrivateKey);
         
         // 部署 Permit2 合约
         Permit2 permit2 = new Permit2();
