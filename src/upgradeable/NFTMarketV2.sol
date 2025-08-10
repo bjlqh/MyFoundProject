@@ -15,30 +15,33 @@ contract NFTMarketV2 is
     OwnableUpgradeable, 
     UUPSUpgradeable 
 {
-    MyERC721Upgradeable public nft;
-    MyToken public token;
+    MyERC721Upgradeable public nft;         //slot[0]
+    MyToken public token;                   //slot[1]
     
     using ECDSA for bytes32;
 
     // 白名单签名者地址
-    address public whitelistSigner;
+    address public whitelistSigner;         //slot[2]
     
     // 已使用的签名映射，防止重放攻击
-    mapping(bytes32 => bool) public usedSignatures;
+    mapping(bytes32 => bool) public usedSignatures;     //slot[3]
     
-    // 新增：离线签名上架功能的已使用签名映射
-    mapping(bytes32 => bool) public usedListingSignatures;
+    // 新增：离线签名上架功能的已使用签名映射（使用__gap空间）
+    mapping(bytes32 => bool) public usedListingSignatures;      //slot[4]
+    
+    // 剩余的预留存储空间
+    uint256[48] private __gap;                      //slot[5-52]
 
     struct Listing {
         address seller;
         uint price;
     }
-    mapping(uint => Listing) public listings;
+    mapping(uint => Listing) public listings;      //slot[53]
 
-    uint256[] public listedTokenIds;
+    uint256[] public listedTokenIds;                //slot[54]
     //tokenId到index的映射
-    mapping(uint256 => uint256) public tokenIdToIndex;
-    mapping(uint256 => bool) public isListed;
+    mapping(uint256 => uint256) public tokenIdToIndex;      //slot[55]
+    mapping(uint256 => bool) public isListed;               //slot[56]
 
     //上架事件
     event Listed(

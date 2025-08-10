@@ -15,27 +15,30 @@ contract NFTMarketV1 is
     OwnableUpgradeable, 
     UUPSUpgradeable 
 {
-    MyERC721Upgradeable public nft;
-    MyToken public token;
+    MyERC721Upgradeable public nft;     //slot[0]
+    MyToken public token;               //slot[1]
     
     using ECDSA for bytes32;
 
     // 白名单签名者地址
-    address public whitelistSigner;
+    address public whitelistSigner;     //slot[2]
     
     // 已使用的签名映射，防止重放攻击
-    mapping(bytes32 => bool) public usedSignatures;
+    mapping(bytes32 => bool) public usedSignatures;     //slot[3]
+    
+    // 预留存储空间用于未来升级
+    uint256[49] private __gap;          //slot[4-52]
 
     struct Listing {
         address seller;
         uint price;
     }
-    mapping(uint => Listing) public listings;
+    mapping(uint => Listing) public listings;       //slot[53]
 
-    uint256[] public listedTokenIds;
+    uint256[] public listedTokenIds;                //slot[54]
     //tokenId到index的映射
-    mapping(uint256 => uint256) public tokenIdToIndex;
-    mapping(uint256 => bool) public isListed;
+    mapping(uint256 => uint256) public tokenIdToIndex;      //slot[55]
+    mapping(uint256 => bool) public isListed;               //slot[56]
 
     //上架事件
     event Listed(
@@ -72,11 +75,15 @@ contract NFTMarketV1 is
     error InvalidPayment();
     error InSufficientFunds();
 
-    /// @custom:oz-upgrades-unsafe-allow constructor
+    /**
+     * 在可升级合约中，构造函数不能用于初始化状态变量。
+     * 必须使用initialze函数，这是由代理模式工作原理决定的。
+     */
     constructor() {
         _disableInitializers();
     }
 
+    //由代理合约调用时执行
     function initialize(
         address _token, 
         address _nft, 
@@ -208,7 +215,18 @@ contract NFTMarketV1 is
         return listedTokenIds.length;
     }
 
-    function _authorizeUpgrade(address newImplementation) internal override onlyOwner {}
+    /**
+     * 这个函数是UUPS模式的安全机制，确保只有授权用户才能升级合约实现。
+     * 他不直接改变代理。而是在升级过程中提供权限验证，是整个升级流程中的重要安全检查点。
+     * 空函数体意味着：
+     * 1.只要调用者是owner,就允许升级到任何实现
+     * 2.可以在这里添加额外的验证逻辑，比如 
+     */
+    function _authorizeUpgrade(address newImplementation) internal override onlyOwner {
+        // 额外检查 require(impl != address(0))
+        // 可以检查新实现是否符合特定接口
+        // require(IERC165(newImplementation).supportsInterface(type(IMyContract).interfaceId))
+    }
 
     /**
      * 当 NFT 合约调用 safeTransferFrom 把 NFT 转给 NFTMarket 时，

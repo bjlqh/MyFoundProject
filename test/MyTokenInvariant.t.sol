@@ -11,7 +11,7 @@ contract MyTokenInvariantTest is Test {
     address[] public holders;
 
     function setUp() public {
-        token = new MyToken("MyToken", "MTK");
+        token = new MyToken("MyToken", "MTK", 0);
         holders.push(address(this));
         
         //指定要fuzz合约

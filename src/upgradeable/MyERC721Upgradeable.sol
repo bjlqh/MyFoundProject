@@ -14,7 +14,6 @@ contract MyERC721Upgradeable is
 {
     uint256 private _tokenIds;
 
-    /// @custom:oz-upgrades-unsafe-allow constructor
     constructor() {
         _disableInitializers();
     }
@@ -50,12 +49,4 @@ contract MyERC721Upgradeable is
         return super.tokenURI(tokenId);
     }
 
-    function supportsInterface(bytes4 interfaceId)
-        public
-        view
-        override(ERC721URIStorageUpgradeable)
-        returns (bool)
-    {
-        return super.supportsInterface(interfaceId);
-    }
 }

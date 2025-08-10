@@ -20,7 +20,7 @@ contract DeployTokenBankPermit2Script is Script {
         console.log("Permit2 deployed at:", address(permit2));
         
         // 部署 ERC20
-        MyToken token = new MyToken("MyToken","MT");
+        MyToken token = new MyToken("MyToken","MT", 0);
         console.log("token address:", address(token));
         
         // 部署 TokenBank（传入 token 和 permit2 地址）

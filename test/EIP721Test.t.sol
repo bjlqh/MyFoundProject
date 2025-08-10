@@ -44,7 +44,7 @@ contract EIP721 is Test {
 
         //部署合约
         vm.startPrank(owner);
-        token = new MyToken("MyEIP721Token", "MET");
+        token = new MyToken("MyEIP721Token", "MET", 0);
         decimals = token.decimals();
         nft = new MyERC721("MyEIP721NFT", "MENFT");
         tokenBank = new TokenBank(address(token), address(0x1));

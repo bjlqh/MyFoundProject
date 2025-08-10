@@ -13,7 +13,7 @@ contract NFTMarketScript is Script {
         vm.startBroadcast();
 
         //部署ERC20
-        MyToken token = new MyToken("MyToken","MT");
+        MyToken token = new MyToken("MyToken","MT", 0);
         console.log("token address:",address(token));
         
         //部署ERC721

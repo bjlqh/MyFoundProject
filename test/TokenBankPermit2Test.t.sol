@@ -17,7 +17,7 @@ contract TokenBankPermit2Test is Test {
         deployer = address(this);
         
         // 部署合约
-        token = new MyToken("MyEIP712Token", "MET");
+        token = new MyToken("MyEIP712Token", "MET", 0);
         permit2 = new Permit2();
         tokenBank = new TokenBank(address(token), address(permit2));
         

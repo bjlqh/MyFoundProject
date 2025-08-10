@@ -11,7 +11,7 @@ contract MyTokenTest is Test {
 
     function setUp() public {
         uint forkBlock = 8129000;
-        token = new MyToken("MyToken", "MTK");
+        token = new MyToken("MyToken", "MTK", 0);
         sepoliaForkId = vm.createSelectFork(vm.rpcUrl("sepolia"), forkBlock);
     }
 
@@ -62,7 +62,7 @@ contract MyTokenTest is Test {
     //断言合约执行错误
     function testExpectRevert2() public {
         vm.startPrank(address(0x123));
-        MyToken mt = new MyToken("MyToken", "MTK");
+        MyToken mt = new MyToken("MyToken", "MTK", 0);
         vm.stopPrank();
 
         vm.startPrank(address(0x456));

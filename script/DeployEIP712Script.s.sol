@@ -16,7 +16,7 @@ contract DeployEIP712Script is Script {
         vm.startBroadcast(deployerPrivateKey);
 
         // 部署Token合约
-        MyToken token = new MyToken("MyEIP712Token", "MET");
+        MyToken token = new MyToken("MyEIP712Token", "MET", 0);
         console.log("Token deployed at:", address(token));
 
         // 部署NFT合约

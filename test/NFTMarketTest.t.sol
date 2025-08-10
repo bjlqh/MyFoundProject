@@ -18,7 +18,7 @@ contract NFTMarketTest is Test {
 
     function setUp() public {
         vm.prank(tokenOwner);
-        token = new MyToken("MockToken", "MTK");
+        token = new MyToken("MockToken", "MTK", 0);
         nft = new MyERC721("MockNFT", "MNFT");
         market = new NFTMarket(address(token), address(nft), address(0x12345678));
 

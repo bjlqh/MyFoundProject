@@ -12,7 +12,7 @@ contract MyTokenScript is Script {
     function run() public {
         vm.startBroadcast();
 
-        token = new MyToken("MyTokennnnnnn","MT");
+        token = new MyToken("MyTokennnnnnn","MT", 0);
 
         vm.stopBroadcast();
     }

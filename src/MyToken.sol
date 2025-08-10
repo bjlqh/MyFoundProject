@@ -10,10 +10,12 @@ contract MyToken is ERC20, ERC20Permit {
 
     constructor(
         string memory name_,
-        string memory symbol_
+        string memory symbol_,
+        uint totalSupply_
     ) ERC20(name_, symbol_) ERC20Permit(name_) {
         owner = msg.sender;
-        _mint(msg.sender, 1000 * 1e18); // 增加初始供应量
+        uint totalSupply = totalSupply_ > 0 ? totalSupply_ : 1000 * 1e18;
+        _mint(msg.sender, totalSupply); // 增加初始供应量
     }
 
     error NotOwner(address caller);

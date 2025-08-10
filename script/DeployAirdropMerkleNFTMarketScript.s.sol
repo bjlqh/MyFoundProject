@@ -12,7 +12,7 @@ contract DeployAirdropMerkleNFTMarketScript is Script {
         uint deployerPrivateKey = vm.envUint("PRIVATE_KEY");
         vm.startBroadcast(deployerPrivateKey);
 
-        MyToken token = new MyToken("MyToken", "MT");
+        MyToken token = new MyToken("MyToken", "MT", 0);
         console.log("Token deployed at:", address(token));
 
         MyERC721 nft = new MyERC721("MyNFT", "MNFT");

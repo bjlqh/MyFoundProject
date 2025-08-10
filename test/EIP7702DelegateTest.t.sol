@@ -22,7 +22,7 @@ contract EIP7702DelegateTest is Test {
     function setUp() public {
         // 部署合约
         delegate = new EIP7702Delegate();
-        token = new MyToken("Test Token", "TEST");
+        token = new MyToken("Test Token", "TEST", 0);
         permit2 = new Permit2();
         bank = new TokenBank(address(token), address(permit2));
         

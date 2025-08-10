@@ -32,7 +32,7 @@ contract AirdropMerkleNFTMerkleTest is Test {
 
     function setUp() public {
         //部署合约
-        token = new MyToken("TestToken", "TTK");
+        token = new MyToken("TestToken", "TTK", 0);
         nft = new MyERC721("TestNFT", "TNFT");
         merkleTree = new MerkleTree();
 
