@@ -26,4 +26,12 @@ contract MyToken is ERC20, ERC20Permit {
         }
         owner = newOwner;
     }
+    
+    // 添加mint函数供StakingPool使用
+    function mint(address to, uint256 amount) public {
+        if (msg.sender != owner) {
+            revert NotOwner(msg.sender);
+        }
+        _mint(to, amount);
+    }
 }
