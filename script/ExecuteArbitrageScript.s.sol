@@ -21,10 +21,10 @@ contract ExecuteArbitrageScript is Script {
         FlashSwapArbitrage flashSwap = FlashSwapArbitrage(flashSwapAddress);
         
         console.log("Executing arbitrage...");
-        console.log("Borrowing 50 TokenA from PoolA");
+        console.log("Borrowing 1 TokenA from PoolA");
         console.log("Swapping in PoolB for higher price");
         
-        // 执行套利：借50个TokenA
+        // 执行套利：借1个TokenA
         uint256 borrowAmount = 1 ether;
         flashSwap.executeFlashSwap(poolA, poolB, tokenA, tokenB, borrowAmount);
         
