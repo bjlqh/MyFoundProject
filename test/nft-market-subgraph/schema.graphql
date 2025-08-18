@@ -1,21 +1,60 @@
-type Bought @entity(immutable: true) {
+type User @entity(immutable: false) {
+  id: Bytes! # address
+  listings: [Listed!]! @derivedFrom(field: "seller")
+  purchases: [Sale!]! @derivedFrom(field: "buyer")
+  sales: [Sale!]! @derivedFrom(field: "seller")
+}
+
+type NFT @entity(immutable: false) {
+  id: String! # nft_address-token_id
+  tokenId: BigInt!
+  nftContract: Bytes!
+  listings: [Listed!]! @derivedFrom(field: "nft")
+  sales: [Sale!]! @derivedFrom(field: "nft")
+}
+
+type Listed @entity(immutable: false) {
   id: Bytes!
-  nft: Bytes! # address
-  tokenId: BigInt! # uint256
-  buyer: Bytes! # address
-  seller: Bytes! # address
-  price: BigInt! # uint256
+  nft: NFT!
+  tokenId: BigInt!
+  seller: User!
+  price: BigInt!
+  isActive: Boolean!
   blockNumber: BigInt!
   blockTimestamp: BigInt!
   transactionHash: Bytes!
+  # 关联的销售记录（如果已售出）
+  sale: Sale
 }
 
-type Listed @entity(immutable: true) {
+type Sale @entity(immutable: false) {
   id: Bytes!
-  nft: Bytes! # address
-  tokenId: BigInt! # uint256
-  seller: Bytes! # address
-  price: BigInt! # uint256
+  nft: NFT!
+  tokenId: BigInt!
+  buyer: User!
+  seller: User!
+  price: BigInt!
+  saleType: SaleType!
+  blockNumber: BigInt!
+  blockTimestamp: BigInt!
+  transactionHash: Bytes!
+  # 关联的原始上架记录
+  originalListing: Listed
+}
+
+enum SaleType {
+  NORMAL
+  WHITELIST
+}
+
+# 保留原始事件实体用于历史记录（不可变）
+type Bought @entity(immutable: true) {
+  id: Bytes!
+  nft: Bytes!
+  tokenId: BigInt!
+  buyer: Bytes!
+  seller: Bytes!
+  price: BigInt!
   blockNumber: BigInt!
   blockTimestamp: BigInt!
   transactionHash: Bytes!
@@ -23,11 +62,11 @@ type Listed @entity(immutable: true) {
 
 type WhitelistBought @entity(immutable: true) {
   id: Bytes!
-  nft: Bytes! # address
-  tokenId: BigInt! # uint256
-  buyer: Bytes! # address
-  seller: Bytes! # address
-  price: BigInt! # uint256
+  nft: Bytes!
+  tokenId: BigInt!
+  buyer: Bytes!
+  seller: Bytes!
+  price: BigInt!
   blockNumber: BigInt!
   blockTimestamp: BigInt!
   transactionHash: Bytes!
